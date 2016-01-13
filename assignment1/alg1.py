@@ -31,8 +31,8 @@ def alg1(array):
     length = len(array) + 1
     max_num = 0
 
-    for j in range (0, length):
-        for i in range (0, j):
+    for i in range (0, length):
+        for j in range (i, length):
             num = 0
             for k in range (i, j):
                 num = num + array[k]
