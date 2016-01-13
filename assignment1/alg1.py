@@ -27,7 +27,7 @@ tests = [
 
 
 def alg1(array):
-    length = len(array)
+    length = len(array) + 1
     max_num = 0
     num = 0
 
@@ -42,12 +42,12 @@ def alg1(array):
     return max_num
 
 def alg2(array):
-    length = len(array)
+    length = len(array) + 1
     max_num = 0
     num = 0
 
     for j in range(0, length):
-        
+
 
 def run_test():
     test_num = 1
