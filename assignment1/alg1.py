@@ -29,7 +29,6 @@ tests = [
 def alg1(array):
     length = len(array) + 1
     max_num = 0
-    num = 0
 
     for j in range (0, length):
         for i in range (0, j):
@@ -44,30 +43,36 @@ def alg1(array):
 def alg2(array):
     length = len(array) + 1
     max_num = 0
-    num = 0
-    l = 0
 
-    #otal of array
-    for k in range(0, length):
-        num = num + array[k]
-        max_num = num
+    for i in range(0, length):
+        num = 0
+        for j in range(i, length):
+            num = num + array[j - 1]
+            if(num > max_num):
+                max_num = num
 
-    j = j - 1
-    for j in range(length, l):
-        for k in range(l, j):
-            num = num - array[j]
+    return max_num
 
-        
+def check_answer(result, correct, test_num):
+    if result != correct:
+       print "Test: {0}, Got {1} expected {2}".format(test_num, result, correct)
+    else:
+        print "Passed: Test {0} {1}, {2}".format(test_num, result, correct)
 
-def run_test():
+def run_tests(function, tests):
     test_num = 1
     for t in tests:
-        answer = alg1(t[0])
+        answer = function(t[0])
         if answer != t[1]:
            print "Test: {0}, Got {1} expected {2}".format(test_num, answer, t[1])
         else:
             print "Passed: Test {0} {1}, {2}".format(test_num, answer, t[1])
         test_num = test_num + 1
 
+    test_num = test_num + 1
+
 if __name__ == "__main__":
-    run_test()
+    print "Algorithm 1\n"
+    run_tests(alg1, tests)
+    print "\nAlgorithm 2\n"
+    run_tests(alg2, tests)
