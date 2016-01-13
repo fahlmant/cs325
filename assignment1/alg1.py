@@ -26,6 +26,11 @@ tests = [
 ([-3, -4, -5, -6, -7], 0)
 ]
 
+final_file = open("final.txt", "w+")
+
+def print_to_file(num):
+    final_file.write(str(num) + " ")
+            
 
 def alg1(array):
     length = len(array) + 1
@@ -39,6 +44,7 @@ def alg1(array):
                 if(num > max_num):
                     max_num = num
 
+    print_to_file(max_num)
     return max_num
 
 def alg2(array):
@@ -52,7 +58,14 @@ def alg2(array):
             if(num > max_num):
                 max_num = num
 
+    print_to_file(max_num)
     return max_num
+
+def alg3(array):
+    length = len(array) + 1
+    max_num = 0
+
+    
 
 def check_answer(result, correct, test_num):
     if result != correct:
@@ -75,9 +88,11 @@ if __name__ == "__main__":
     print "--------------"
     start_time = time.time()
     run_tests(alg1)
+    final_file.write("\n")
     print "\nRunning time: {0}".format(time.time() - start_time)
     print "\nAlgorithm 2"
     print "--------------"
     start_time = time.time()
     run_tests(alg2)
+    final_file.write("\n")
     print "\nRunning time: {0}".format(time.time() - start_time)
