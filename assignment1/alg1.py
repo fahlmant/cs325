@@ -59,7 +59,7 @@ def check_answer(result, correct, test_num):
     else:
         print "Passed: Test {0} {1}, {2}".format(test_num, result, correct)
 
-def run_tests(function, tests):
+def run_tests(function):
     test_num = 1
     for t in tests:
         answer = function(t[0])
@@ -69,10 +69,8 @@ def run_tests(function, tests):
             print "Passed: Test {0} {1}, {2}".format(test_num, answer, t[1])
         test_num = test_num + 1
 
-    test_num = test_num + 1
-
 if __name__ == "__main__":
-    print "Algorithm 1\n"
-    run_tests(alg1, tests)
+    print "\nAlgorithm 1\n"
+    run_tests(alg1)
     print "\nAlgorithm 2\n"
-    run_tests(alg2, tests)
+    run_tests(alg2)
