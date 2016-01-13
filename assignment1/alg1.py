@@ -45,9 +45,19 @@ def alg2(array):
     length = len(array) + 1
     max_num = 0
     num = 0
+    l = 0
 
-    for j in range(0, length):
+    #otal of array
+    for k in range(0, length):
+        num = num + array[k]
+        max_num = num
 
+    j = j - 1
+    for j in range(length, l):
+        for k in range(l, j):
+            num = num - array[j]
+
+        
 
 def run_test():
     test_num = 1
@@ -55,6 +65,8 @@ def run_test():
         answer = alg1(t[0])
         if answer != t[1]:
            print "Test: {0}, Got {1} expected {2}".format(test_num, answer, t[1])
+        else:
+            print "Passed: Test {0} {1}, {2}".format(test_num, answer, t[1])
         test_num = test_num + 1
 
 if __name__ == "__main__":
