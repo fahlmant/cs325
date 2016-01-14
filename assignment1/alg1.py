@@ -133,4 +133,5 @@ def benchmark(num, function):
     bench_file.close()
 
 if __name__ == "__main__":
-    benchmark(1, alg1)
+    benchmark(1, alg3)
+    final_tests()
