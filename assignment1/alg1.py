@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import time
+import random
 
 tests = [
 ([22, -27, 38, -34, 49, 40, 13, -44, -13, 28, 46, 7, -26, 42, 29, 0, -6, 35, 23, -37, 10, 12, -2, 18, -12, -49, -10, 37, -5, 17, 6, -11, -22, -17, -50, -40, 44, 14, -41, 19, -15, 45, -23, 48, -1, -39, -46, 15, 3, -32, -29, -48, -19, 27, -33, -8, 11, 21, -43, 24, 5, 34, -36, -9, 16, -31, -7, -24, -47, -14, -16, -18, 39, -30, 33, -45, -38, 41, -3, 4, -25, 20, -35, 32, 26, 47, 2, -4, 8, 9, 31, -28, 36, 1, -21, 30, 43, 25, -20, -42], 239),
@@ -30,7 +31,6 @@ final_file = open("final.txt", "w+")
 
 def print_to_file(num):
     final_file.write(str(num) + " ")
-            
 
 def alg1(array):
     length = len(array) + 1
@@ -78,13 +78,14 @@ def run_tests(function):
     test_num = 1
     for t in tests:
         answer = function(t[0])
+        print_to_file(answer)
         if answer != t[1]:
            print "Test: {0}, Got {1} expected {2}".format(test_num, answer, t[1])
         else:
             print "Passed: Test {0} {1}, {2}".format(test_num, answer, t[1])
         test_num = test_num + 1
 
-if __name__ == "__main__":
+def final_tests():
     print "\nAlgorithm 1"
     print "--------------"
     start_time = time.time()
@@ -97,3 +98,39 @@ if __name__ == "__main__":
     run_tests(alg2)
     final_file.write("\n")
     print "\nRunning time: {0}".format(time.time() - start_time)
+    print "\nAlgorithm 3"
+    print "--------------"
+    start_time = time.time()
+    run_tests(alg3)
+    final_file.write("\n")
+    print "\nRunning time: {0}".format(time.time() - start_time)
+    final_file.close()
+
+def benchmark(num, function):
+
+    bench_file = open("benchmark{0}.txt".format(num), "w+")
+    array_sizes = [100, 200, 300, 400, 500, 600, 700, 800, 900,
+                   1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000]
+
+    bench_file.write("Algorithim: {0}\n".format(num))
+
+    for n in array_sizes:
+        print "Starting test {0}".format(n)
+        test_array = []
+        times = []
+        for i in range(0, n):
+           test_array.append(random.randint(-100, 100))
+
+        for i in range(0, 10):
+            print "test {0}, {1}".format(n, i)
+            start_time = time.time()
+            function(test_array)
+            times.append(round(time.time() - start_time, 14))
+
+
+        bench_file.write("N = {0}, T = {1}\n".format(str(n), format((sum(times) / 10), '.14f')))
+
+    bench_file.close()
+
+if __name__ == "__main__":
+    benchmark(1, alg1)
