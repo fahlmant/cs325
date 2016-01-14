@@ -41,31 +41,32 @@ def alg1(array):
             num = 0
             for k in range (i, j):
                 num = num + array[k]
-                if(num > max_num):
-                    max_num = num
+                max_num = max(max_num, num)
 
-    print_to_file(max_num)
     return max_num
 
 def alg2(array):
     length = len(array) + 1
     max_num = 0
 
-    for i in range(0, length):
+    for i in range(1, length):
         num = 0
         for j in range(i, length):
             num = num + array[j - 1]
-            if(num > max_num):
-                max_num = num
+            max_num = max(max_num, num)
 
-    print_to_file(max_num)
     return max_num
 
 def alg3(array):
-    length = len(array) + 1
+    length = len(array)
     max_num = 0
+    num = 0
 
-    
+    for i in range(0, length):
+        num = max(0, num + array[i])
+        max_num = max(max_num, num)
+
+    return max_num
 
 def check_answer(result, correct, test_num):
     if result != correct:
