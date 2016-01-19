@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 from itertools import combinations
+from functools import reduce
+
 
 NUM_LOCKERS = 0
 NUM_KEYS = 0
@@ -27,29 +29,31 @@ def alg1(lockers, keys, tennis):
     lengths = []
     for i in range(1, NUM_KEYS + 1):
         current_keys = current_keys + (list(combinations(range(0, NUM_KEYS), i)))
-    # print current_keys
 
     for comb in current_keys:
         total = 0
+        current_lockers = [0 for x in range(0,lockers)]
+        for x in range(0, len(comb)):
+            current_lockers[comb[x] - 1] = 1
         for i in range(0, NUM_TENNIS):
-            closests = []
-            for j in range(0, len(comb)):
-                #  print "i = {}".format(i)
-                #  print "j = {}".format(j)
-                #  print "len of comb = {}, comb = {}".format(len(comb), comb)
-                #  print tennis[i]
-                #  print comb[j]
-                #  print keys
-                #  print keys[comb[j]]
-                #  print comb
-                closests.append(abs(keys[comb[j]] - tennis[i]))
-            total = total + min(closests)
-        lengths.append(total)
+            pos = tennis[i]
+            distances = []
+            for j in range (0, lockers):
+                if(current_lockers[j] == 1):
+                    distances.append(((abs(pos - j)), j))
+            minimum_distance = reduce(lambda a,b: min(a, b), distances)
+            locker_pos = minimum_distance[1]
+            if(locker_pos < pos):
+                for x in range (locker_pos, pos):
+                    current_lockers[x] = 1
+            else:
+                for x in range (pos, locker_pos):
+                    current_lockers[x] = 1
+            
+        lengths.append(sum(current_lockers))
 
     print lengths
-
     return min(lengths)
-
 
 
     # for x in range(0, lockers):
