@@ -28,19 +28,25 @@ def alg1(lockers, keys, tennis):
     current_keys = []
     lengths = []
     for i in range(1, NUM_KEYS + 1):
-        current_keys = current_keys + (list(combinations(range(0, NUM_KEYS), i)))
+        current_keys = current_keys + (list(combinations(range(0, NUM_KEYS ), i)))
 
     for comb in current_keys:
         total = 0
         current_lockers = [0 for x in range(0,lockers)]
         for x in range(0, len(comb)):
-            current_lockers[comb[x] - 1] = 1
+            current_lockers[keys[comb[x]] - 1] = 1
         for i in range(0, NUM_TENNIS):
-            pos = tennis[i]
+            #For each tennis ball
+            #Get the position of the tennis ball
+            pos = tennis[i] - 1
             distances = []
+            #For each locker
             for j in range (0, lockers):
+                #If the locker is open
                 if(current_lockers[j] == 1):
+                    #Find the distance between the ball and the locker
                     distances.append(((abs(pos - j)), j))
+            #Find the minimum distance between ball and locker
             minimum_distance = reduce(lambda a,b: min(a, b), distances)
             locker_pos = minimum_distance[1]
             if(locker_pos < pos):
@@ -49,33 +55,12 @@ def alg1(lockers, keys, tennis):
             else:
                 for x in range (pos, locker_pos):
                     current_lockers[x] = 1
-            
-        lengths.append(sum(current_lockers))
+        lengths.append(sum(int (i) for i in current_lockers) + 1)
 
     print lengths
     return min(lengths)
 
 
-    # for x in range(0, lockers):
-    #  for i in range(0, keys):
-        #  for j in range(i, keys):
-            #  for k in range(i, j):
-                #  if k = i:
-
-                #  elif k < j:
-
-                #  elif k > i
-
-
-
-
-
-
 if __name__ == "__main__":
     read_input("./test.txt")
-    #  print NUM_LOCKERS
-    #  print NUM_KEYS
-    #  print NUM_TENNIS
-    #  print KEY_ARRAY
-    #  print TENNIS_ARRAY
     print alg1(NUM_LOCKERS, KEY_ARRAY, TENNIS_ARRAY)
