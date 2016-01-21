@@ -61,7 +61,7 @@ def alg1(lockers, keys, tennis):
 
 def alg2(lockers, keys, tennis):
     # Init DP table
-    DP = [lockers + 1 for x in range(0, lockers)]
+    DP = [0 for x in range(0, lockers)]
     answer = 0
 
     # Fill in lockers that have keys
@@ -70,18 +70,20 @@ def alg2(lockers, keys, tennis):
 
     for i in range(0, lockers):
         min_table = []
-        if DP[i] == 1:
-            continue
-        else:
-            for j in range(0, lockers):
-                min_table.append(abs(DP[j] - abs(i - j)) + 1)
+        # if DP[i] == 1:
+        #     continue
+        # else:
+        for j in range(0, len(keys)):
+            print DP
+            print "j = {}, keys[j] = {}".format(j, keys[j] - 1)
+            min_table.append(abs(i - (keys[j] - 1) + 1))
 
-            DP[i] = min(min_table) + 1
+        DP[i] = min(min_table)
 
-        print DP
 
     for t in range(0, len(tennis)):
-        print "Adding {}".format(tennis[t] - 1)
+        # print DP
+        # print "Adding {}".format(tennis[t] - 1)
         answer = answer + DP[tennis[t] - 1]
 
 
