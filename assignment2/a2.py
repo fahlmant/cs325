@@ -70,13 +70,13 @@ def alg2(lockers, keys, tennis):
 
     for i in range(0, lockers):
         min_table = []
-        # if DP[i] == 1:
-        #     continue
-        # else:
-        for j in range(0, len(keys)):
-            print DP
-            print "j = {}, keys[j] = {}".format(j, keys[j] - 1)
-            min_table.append(abs(i - (keys[j] - 1) + 1))
+        if DP[i] == 1:
+            continue
+        else:
+            for j in range(0, len(keys)):
+                print DP
+                print "j = {}, keys[j] = {}".format(j, keys[j])
+                min_table.append(abs(i - (keys[j])))
 
         DP[i] = min(min_table)
 
