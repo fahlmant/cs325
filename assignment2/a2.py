@@ -50,12 +50,12 @@ def alg1(lockers, keys, tennis):
             minimum_distance = reduce(lambda a,b: min(a, b), distances)
             locker_pos = minimum_distance[1]
             if(locker_pos < pos):
-                for x in range (locker_pos, pos):
+                for x in range (locker_pos, pos + 1):
                     current_lockers[x] = 1
             else:
                 for x in range (pos, locker_pos):
                     current_lockers[x] = 1
-        lengths.append(sum(int (i) for i in current_lockers) + 1)
+        lengths.append(sum(int (i) for i in current_lockers))
 
     print lengths
     return min(lengths)
