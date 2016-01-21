@@ -57,10 +57,40 @@ def alg1(lockers, keys, tennis):
                     current_lockers[x] = 1
         lengths.append(sum(int (i) for i in current_lockers))
 
-    print lengths
     return min(lengths)
+
+def alg2(lockers, keys, tennis):
+    # Init DP table
+    DP = [lockers + 1 for x in range(0, lockers)]
+    answer = 0
+
+    # Fill in lockers that have keys
+    for k in range(0, len(keys)):
+        DP[keys[k] - 1] = 1
+
+    for i in range(0, lockers):
+        min_table = []
+        if DP[i] == 1:
+            continue
+        else:
+            for j in range(0, lockers):
+                min_table.append(abs(DP[j] - abs(i - j)) + 1)
+
+            DP[i] = min(min_table) + 1
+
+        print DP
+
+    for t in range(0, len(tennis)):
+        print "Adding {}".format(tennis[t] - 1)
+        answer = answer + DP[tennis[t] - 1]
+
+
+    return answer
+
+
+
 
 
 if __name__ == "__main__":
     read_input("./test.txt")
-    print alg1(NUM_LOCKERS, KEY_ARRAY, TENNIS_ARRAY)
+    print alg2(NUM_LOCKERS, KEY_ARRAY, TENNIS_ARRAY)
