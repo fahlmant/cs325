@@ -9,6 +9,22 @@ NUM_KEYS = 0
 NUM_TENNIS = 0
 KEY_ARRAY = TENNIS_ARRAY = []
 
+def run_tests(function):
+    with open('./dp.txt', 'r') as f:
+        for i in range(0, 4):
+            test_num = f.readline().split()
+            nums = f.readline().split()
+            keys = [int(x) for x in f.readline().split()]
+            tennis = [int(x) for x in f.readline().split()]
+            answer = function(int(nums[0]), int(nums[1]), int(nums[2]), keys, tennis)
+            f.readline()
+            correct = int(f.readline())
+            if answer != correct:
+                print "Test {}, Got {}, expected {}".format(test_num[-1], answer, correct)
+            else:
+                print "Test {} passed".format(test_num[-1])
+            f.readline()
+
 def read_input(file):
     global NUM_LOCKERS
     global NUM_KEYS
@@ -24,7 +40,7 @@ def read_input(file):
         NUM_TENNIS = int(nums[2])
 
 # Algorithm 1
-def alg1(lockers, keys, tennis):
+def alg1(num_lockers, num_keys, num_tennis, keys, tennis):
     current_keys = []
     lengths = []
     for i in range(1, NUM_KEYS + 1):
@@ -59,29 +75,30 @@ def alg1(lockers, keys, tennis):
 
     return min(lengths)
 
-def alg2(lockers, keys, tennis):
+def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
     # Init DP table
-    DP = [0 for x in range(0, lockers)]
+    DP = [0 for x in range(0, num_lockers)]
     answer = 0
 
     # Fill in lockers that have keys
-    for k in range(0, len(keys)):
+    for k in range(0, num_keys):
         DP[keys[k] - 1] = 1
 
-    for i in range(0, lockers):
+    for i in range(0, num_lockers):
         min_table = []
-        if DP[i] == 1:
-            continue
-        else:
-            for j in range(0, len(keys)):
-                print DP
-                print "j = {}, keys[j] = {}".format(j, keys[j])
-                min_table.append(abs(i - (keys[j])))
+        # if DP[i] == 1:
+        #     continue
+        # else:
+        for j in range(0, num_keys):
+            # print DP
+            # print "j = {}, keys[j] = {}".format(j, keys[j])
+            min_table.append(abs(i - (keys[j] - 1)))
 
-        DP[i] = min(min_table)
+        DP[i] = min(min_table) + 1
+        print DP
 
 
-    for t in range(0, len(tennis)):
+    for t in range(0, num_tennis):
         # print DP
         # print "Adding {}".format(tennis[t] - 1)
         answer = answer + DP[tennis[t] - 1]
@@ -94,5 +111,4 @@ def alg2(lockers, keys, tennis):
 
 
 if __name__ == "__main__":
-    read_input("./test.txt")
-    print alg2(NUM_LOCKERS, KEY_ARRAY, TENNIS_ARRAY)
+    run_tests(alg2)
