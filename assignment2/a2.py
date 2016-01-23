@@ -106,9 +106,21 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
 
     return answer
 
+def alg_test(num_lockers, num_keys, num_tennis, keys, tennis):
+
+    left_most = min(tennis)
+    DP = []
+    total = 0
+
+    for x in range(0, num_keys):
+        DP[x] = (keys[x] - left_most) - 1
 
 
+    total = DP[-1]
+    for i in range(len(DP) - 1, 0):
+        total = total - DP[i] 
 
+    print total
 
 if __name__ == "__main__":
-    run_tests(alg2)
+    run_tests(alg_test)
