@@ -41,11 +41,11 @@ def assignment_tests(test_file, function):
             num_keys = int(nums[1])
             num_tennis = int(nums[2])
             answer = function(num_lockers, num_keys, num_tennis, key_array, tennis_array)
-            print "{}: Test {} = {}".format(function.__name__, i, answer)
+            # print "{}: Test {} = {}".format(function.__name__, i, answer)
             answers.append(answer)
             f.readline()
 
-    print "{}: {}".format(function.__name__, answers)
+    # print "{}: {}".format(function.__name__, answers)
 
 # Algorithm 1
 def alg1(num_lockers, num_keys, num_tennis, keys, tennis):
@@ -84,36 +84,34 @@ def alg1(num_lockers, num_keys, num_tennis, keys, tennis):
     return min(lengths)
 
 def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
-    # Init DP table
-    DP = [0 for x in range(0, num_lockers)]
-    answer = 0
+    # Init DP table. Set values greater than highest locker.
+    DP = [num_lockers + 1 for x in range(num_lockers)]
+    KEYS = keys
+    TENNIS = tennis
 
-    # Fill in lockers that have keys
-    for k in range(0, num_keys):
-        DP[keys[k] - 1] = 1
+    KEYS.sort()
+    TENNIS.sort()
+    print KEYS
+    print TENNIS
 
-    for i in range(0, num_lockers):
-        min_table = []
-        # if DP[i] == 1:
-        #     continue
-        # else:
-        for j in range(0, num_keys):
-            # print DP
-            # print "j = {}, keys[j] = {}".format(j, keys[j])
-            min_table.append(abs(i - (keys[j] - 1)))
+    # Setup first key
+    if KEYS[0] < TENNIS[0]:
+        DP[0] = 0
+    else:
+        DP[0] = KEYS[0] - TENNIS[0] + 1
 
-        DP[i] = min(min_table) + 1
-        print DP
+    for i in range(1, num_keys):
+        for j in range(0, i):
+            # calculate least unopened
+            if DP[j] + least < DP[i]:
+                DP[i] = DP[j] + least
 
-
-    for t in range(0, num_tennis):
-        # print DP
-        # print "Adding {}".format(tennis[t] - 1)
-        answer = answer + DP[tennis[t] - 1]
+    # Find least function
 
 
-    return answer
+    # return DP[num_keys]
 
 if __name__ == "__main__":
     # run_tests(alg1)
-    assignment_tests('dp_set1.txt', alg1)
+    # assignment_tests('dp_set1.txt', alg1)
+    assignment_tests('dp_set2.txt', alg2)
