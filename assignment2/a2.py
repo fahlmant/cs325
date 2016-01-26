@@ -10,7 +10,7 @@ from functools import reduce
 
 def run_tests(function):
     with open('./dp.txt', 'r') as f:
-        for i in range(0, 4):
+        for i in range(8):
             test_num = f.readline().split()
             nums = f.readline().split()
             keys = [int(x) for x in f.readline().split()]
@@ -91,8 +91,8 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
 
     KEYS.sort()
     TENNIS.sort()
-    print KEYS
-    print TENNIS
+    # print KEYS
+    # print TENNIS
 
     # Setup first key
     if KEYS[0] < TENNIS[0]:
@@ -103,15 +103,39 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
     for i in range(1, num_keys):
         for j in range(0, i):
             # calculate least unopened
+            least = 0
+            for k in range(KEYS[j], KEYS[i]):
+                opened = 0
+                if KEYS[i] - KEYS[j] == 1:
+                    if KEYS[j] in TENNIS:
+                        opened = 1
+                    else:
+                        opened = 0
+                else:
+                    for n in range(j + 1, i):
+
+                        m = n
+                        if n in TENNIS:
+                            continue
+                        else:
+                            while (m+1) not in TENNIS and m < (i - 1):
+                                m = m + 1
+                            if (m - 1) + 1 > opened:
+                                opened = (m - n) + 1
+                    least = (i - (j + 1) + 1) - opened
+
+
+            # Either use or don't use the current key
             if DP[j] + least < DP[i]:
                 DP[i] = DP[j] + least
 
     # Find least function
+    if TENNIS[num_tennis - 1] >= KEYS[num_keys - 1]:
+        DP[num_keys - 1] = DP[num_keys - 1] + (TENNIS[num_tennis - 1] - KEYS[num_keys - 1]) + 1
 
-
-    # return DP[num_keys]
+    return DP[num_keys - 1]
 
 if __name__ == "__main__":
-    # run_tests(alg1)
+    run_tests(alg2)
     # assignment_tests('dp_set1.txt', alg1)
-    assignment_tests('dp_set2.txt', alg2)
+    # assignment_tests('dp_set2.txt', alg2)
