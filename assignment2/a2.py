@@ -40,10 +40,12 @@ def assignment_tests(test_file, function):
             num_lockers = int(nums[0])
             num_keys = int(nums[1])
             num_tennis = int(nums[2])
-            answers.append(function(num_lockers, num_keys, num_tennis, key_array, tennis_array))
+            answer = function(num_lockers, num_keys, num_tennis, key_array, tennis_array)
+            print "{}: Test {} = {}".format(function.__name__, i, answer)
+            answers.append(answer)
             f.readline()
 
-    print "{} = {}".format(function.__name__, answers)
+    print "{}: {}".format(function.__name__, answers)
 
 # Algorithm 1
 def alg1(num_lockers, num_keys, num_tennis, keys, tennis):
