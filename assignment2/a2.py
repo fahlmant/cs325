@@ -10,7 +10,7 @@ from functools import reduce
 
 def run_tests(function):
     with open('./dp.txt', 'r') as f:
-        for i in range(0, 4):
+        for i in range(0, 8):
             test_num = f.readline().split()
             nums = f.readline().split()
             keys = [int(x) for x in f.readline().split()]
@@ -83,9 +83,40 @@ def alg1(num_lockers, num_keys, num_tennis, keys, tennis):
 
     return min(lengths)
 
+def least_calc(keyi, keyj, TENNIS):
+    current_tennis = []
+    for x in range(0, len(TENNIS)):
+        if(TENNIS[x] >= keyj and TENNIS[x] < keyi):
+            current_tennis.append(TENNIS[x])
+
+    distances = []
+    if not current_tennis:
+        return 0 
+    if current_tennis and (keyi - keyj) == 1:
+        return len(current_tennis)
+    for i in range(len(current_tennis), 0, -1):
+        left_key = 0
+        right_key = 0
+        for x in range(0, i):
+            if(i != 0):
+                if(x == 0):
+                    right_key = right_key + (abs(current_tennis[i -1] - keyi))
+                else:
+                    right_key = right_key + (abs(current_tennis[i - (x+1)] - current_tennis[i - x]))
+        for y in range(i, len(current_tennis)):
+            if(y == 0):
+                left_key = left_key + (abs(current_tennis[y] - keyj))
+            else:
+                left_key = left_key + (abs(current_tennis[y] - current_tennis[y-1]))
+        distances.append(left_key + right_key)
+    return min(distances)
+        
+
+
+
 def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
     # Init DP table. Set values greater than highest locker.
-    DP = [num_lockers + 1 for x in range(num_lockers)]
+    DP = [num_lockers + 1 for x in range(num_keys)]
     KEYS = keys
     TENNIS = tennis
 
@@ -94,17 +125,28 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
     print KEYS
     print TENNIS
 
-    # Setup first key
-    if KEYS[0] < TENNIS[0]:
-        DP[0] = 0
-    else:
-        DP[0] = KEYS[0] - TENNIS[0] + 1
 
+    # Setup first key
+    if TENNIS[0] < KEYS[0] or num_tennis == 1:
+        DP[0] = abs(KEYS[0] - TENNIS[0]) + 1
+    else:
+        DP[0] = 0
+
+        
     for i in range(1, num_keys):
         for j in range(0, i):
             # calculate least unopened
+            least = least_calc(KEYS[i], KEYS[j], TENNIS) 
             if DP[j] + least < DP[i]:
                 DP[i] = DP[j] + least
+    print DP
+
+    if num_tennis > 1 and TENNIS[num_tennis - 1] > KEYS[num_keys - 1]:
+        DP[num_keys - 1] = DP[num_keys - 1] + (TENNIS[num_tennis - 1] - KEYS[num_keys - 1]) + 1
+
+    print DP
+
+    return DP[num_keys - 1]
 
     # Find least function
 
@@ -112,6 +154,6 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
     # return DP[num_keys]
 
 if __name__ == "__main__":
-    # run_tests(alg1)
+    run_tests(alg2)
     # assignment_tests('dp_set1.txt', alg1)
-    assignment_tests('dp_set2.txt', alg2)
+#    assignment_tests('dp_set2.txt', alg2)
