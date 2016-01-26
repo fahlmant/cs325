@@ -41,11 +41,11 @@ def assignment_tests(test_file, function):
             num_keys = int(nums[1])
             num_tennis = int(nums[2])
             answer = function(num_lockers, num_keys, num_tennis, key_array, tennis_array)
-            # print "{}: Test {} = {}".format(function.__name__, i, answer)
+            print "{}: Test {} = {}".format(function.__name__, i, answer)
             answers.append(answer)
             f.readline()
 
-    # print "{}: {}".format(function.__name__, answers)
+    print "{}: {}".format(function.__name__, answers)
 
 # Algorithm 1
 def alg1(num_lockers, num_keys, num_tennis, keys, tennis):
@@ -91,7 +91,7 @@ def least_calc(keyi, keyj, TENNIS):
 
     distances = []
     if not current_tennis:
-        return 0 
+        return 0
     if current_tennis and (keyi - keyj) == 1:
         return len(current_tennis)
     for i in range(len(current_tennis), 0, -1):
@@ -110,7 +110,7 @@ def least_calc(keyi, keyj, TENNIS):
                 left_key = left_key + (abs(current_tennis[y] - current_tennis[y-1]))
         distances.append(left_key + right_key)
     return min(distances)
-        
+
 
 
 
@@ -122,8 +122,8 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
 
     KEYS.sort()
     TENNIS.sort()
-    print KEYS
-    print TENNIS
+    # print KEYS
+    # print TENNIS
 
 
     # Setup first key
@@ -132,19 +132,19 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
     else:
         DP[0] = 0
 
-        
+
     for i in range(1, num_keys):
         for j in range(0, i):
             # calculate least unopened
-            least = least_calc(KEYS[i], KEYS[j], TENNIS) 
+            least = least_calc(KEYS[i], KEYS[j], TENNIS)
             if DP[j] + least < DP[i]:
                 DP[i] = DP[j] + least
-    print DP
+    # print DP
 
     if num_tennis > 1 and TENNIS[num_tennis - 1] > KEYS[num_keys - 1]:
         DP[num_keys - 1] = DP[num_keys - 1] + (TENNIS[num_tennis - 1] - KEYS[num_keys - 1]) + 1
 
-    print DP
+    # print DP
 
     return DP[num_keys - 1]
 
@@ -154,6 +154,6 @@ def alg2(num_lockers, num_keys, num_tennis, keys, tennis):
     # return DP[num_keys]
 
 if __name__ == "__main__":
-    run_tests(alg2)
-    # assignment_tests('dp_set1.txt', alg1)
-#    assignment_tests('dp_set2.txt', alg2)
+    # run_tests(alg2)
+    assignment_tests('dp_set1.txt', alg1)
+    assignment_tests('dp_set2.txt', alg2)
