@@ -8,9 +8,9 @@ def summation(array, type):
             sum = sum + array[i]
             sum_array.append(sum)
     elif type == "suffix":
-        for i in range(len(array), 0, -1):
+        for i in range(len(array) - 1, -1, -1):
             sum = sum + array[i]
-            sum_array.append(sum)
+            sum_array.insert(0, sum)
 
     return sum_array
 
@@ -18,11 +18,39 @@ def summation(array, type):
 def div_and_con(array):
     pass
 
-def method1(array1, array2):
-    pass
-
 def method2(array1, array2):
-    pass
+    s_a1 = sorted(array1)
+    s_a2 = sorted(array2)
+
+    len1 = len(array1)
+    len2 = len(array2)
+
+    print s_a1
+    print s_a2
+
+    best = (0, 0)
+    i = 0
+    k = len2 - 1
+
+    s = sys.maxint
+
+    while (i < len1 and k >= 0):
+        print "i = {}, k = {}".format(i, k)
+        if abs(s_a1[i] + s_a2[k]) <= s:
+            best = (i, k)
+            s = abs(s_a1[i] + s_a2[k])
+            print "sum = {}".format(s)
+
+        print s_a1[i] + s_a2[k]
+        if s_a1[i] + s_a2[k] > 0:
+            k = k - 1
+        else:
+            i = i + 1
+
+    print s_a1[i], s_a2[k]
+
+    return (s, best)
+
 
 def method3(array1, array2):
 
@@ -45,16 +73,16 @@ def method3(array1, array2):
 
 
 if __name__ == "__main__":
-    array1 = [0, 5, 12, 4]
-    array2 = [12, -2, 7, 9]
-    array3 = [31, -41, 59, 26, -53]
-    array4 = [58, -6, 97, -93, -23]
+    #  array1 = [0, 5, 12, 4]
+    #  array2 = [12, -2, 7, 9]
+    array3 = [58, -6, 97, -93, -23]
+    array4 = [31, -41, 59, 26, -53]
+
 
     # get summations of the prefix and suffix
 
-    print array1
-    print summation(array1, 'prefix')
-    print summation(array1, 'suffix')
+    #  print summation(array3, 'prefix')
+    #  print summation(array4, 'suffix')
 
     # print method3(summation(array1), summation(array2))
-    print method3(summation(array3), summation(array4))
+    print method2(summation(array3, 'prefix'), summation(array4, 'suffix'))
