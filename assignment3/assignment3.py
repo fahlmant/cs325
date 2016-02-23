@@ -9,7 +9,8 @@ def test():
 
     num = 0
     for t in tests:
-        answer = div_and_con(t[0])
+        data = (t[0], 0, 0, 0)
+        answer = div_and_con(data)
 
         if answer[0] != t[1] or answer[1] != t[2] or answer[2] != t[3]:
             print "test {} FAILED: Got {}, {}, {} "\
@@ -20,8 +21,8 @@ def test():
 
         num = num + 1
 
-
 def summation(array, type):
+    print array
     s = 0
     sum_array = []
     if type == "prefix":
@@ -36,8 +37,11 @@ def summation(array, type):
     return sum_array
 
 def method2(array1, array2):
-    s_a1 = sorted(array1)
-    s_a2 = sorted(array2)
+    s_a1 = sorted(array1[0])
+    s_a2 = sorted(array2[0])
+
+    sum_a1 = summation(s_a1, 'prefix')
+    sum_a2 = summation(s_a2, 'suffix')
 
     len1 = len(array1)
     len2 = len(array2)
@@ -53,20 +57,20 @@ def method2(array1, array2):
 
     while (i < len1 and k >= 0):
         # print "i = {}, k = {}".format(i, k)
-        if abs(s_a1[i] + s_a2[k]) <= s:
+        if abs(sum_a1[i] + sum_a2[k]) <= s:
             best = (i, k)
-            s = abs(s_a1[i] + s_a2[k])
+            s = abs(sum_a1[i] + sum_a2[k])
             # print "sum = {}".format(s)
 
-        # print s_a1[i] + s_a2[k]
-        if s_a1[i] + s_a2[k] > 0:
+        # print sum_a1[i] + sum_a2[k]
+        if sum_a1[i] + sum_a2[k] > 0:
             k = k - 1
         else:
             i = i + 1
 
     # print s_a1[i], s_a2[k]
 
-    return (s, best)
+    return (array1[0] + array2[0], s, best[0], best[1])
 
 
 def method3(array1, array2):
@@ -88,20 +92,28 @@ def method3(array1, array2):
     return min_num
 
 def div_and_con(array):
-    if len(array) == 1:
+    """
+    Basic data structure:
+
+    (array, sum, left index, right index)
+    """
+    print array
+    if len(array[0]) == 1:
         return array
 
-    n = int(math.floor(len(array) / 2))
+    n = int(math.floor(len(array[0]) / 2))
     print n
-    l = div_and_con(array[n:])
-    r = div_and_con(array[:n])
+    l_data = (array[0][n:], array[1], array[2], array[3])
+    l = div_and_con(l_data)
+    r_data = (array[0][:n], array[1], array[2], array[3])
+    r = div_and_con(r_data)
 
-    m = method2(summation(l, 'prefix'), summation(r, 'suffix'))
+    m = method2(l, r)
 
     # Compare left, right and suffix/prefix
-    if l[0] < r[0] and l[0] < m[0]:
+    if l[1] < r[1] and l[1] < m[1]:
         return l
-    elif r[0] < l[0] and r < m[0]:
+    elif r[1] < l[1] and r < m[1]:
         return r
     else:
         return m
