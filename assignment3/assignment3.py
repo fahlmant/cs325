@@ -12,9 +12,13 @@ def test():
         data = (t[0], 0, 0, 0)
         answer = div_and_con(data)
 
+        #  print "method: {}, correct: {}".format(method2(t[0][(len(t[0]) / 2):],
+                                                       #  t[0][:(len(t[0]) / 2)]), (t[1], t[2], t[3]))
+
+
         if answer[0] != t[1] or answer[1] != t[2] or answer[2] != t[3]:
             print "test {} FAILED: Got {}, {}, {} "\
-                    "expected {}, {}, {}".format(num, answer[0], answer[1], answer[2],
+                    "expected {}, {}, {}".format(num, answer[1], answer[2], answer[3],
                                                  t[1], t[2], t[3])
         else:
             print "test {} PASSED: GOT {}, {}, {}".format(num, answer[0], answer[1], answer[2])
@@ -22,7 +26,7 @@ def test():
         num = num + 1
 
 def summation(array, type):
-    print array
+    #  print array
     s = 0
     sum_array = []
     if type == "prefix":
@@ -43,8 +47,11 @@ def method2(array1, array2):
     sum_a1 = summation(s_a1, 'prefix')
     sum_a2 = summation(s_a2, 'suffix')
 
-    len1 = len(array1)
-    len2 = len(array2)
+    len1 = len(array1[0])
+    len2 = len(array2[0])
+
+    #  if len1 == 1 and len2 == 1:
+        #  return (array1[0] + array2[0], sum_a1[0] + sum_a2[0], 0, 1)
 
     # print s_a1
     # print s_a2
@@ -70,7 +77,7 @@ def method2(array1, array2):
 
     # print s_a1[i], s_a2[k]
 
-    return (array1[0] + array2[0], s, best[0], best[1])
+    return (s, best[0], best[1])
 
 
 def method3(array1, array2):
@@ -97,26 +104,27 @@ def div_and_con(array):
 
     (array, sum, left index, right index)
     """
-    print array
+    #  print array
     if len(array[0]) == 1:
         return array
 
     n = int(math.floor(len(array[0]) / 2))
-    print n
+    #  print n
     l_data = (array[0][n:], array[1], array[2], array[3])
     l = div_and_con(l_data)
     r_data = (array[0][:n], array[1], array[2], array[3])
     r = div_and_con(r_data)
 
-    m = method2(l, r)
+    #  m = method2(l, r)
+    return method2(l, r)
 
     # Compare left, right and suffix/prefix
-    if l[1] < r[1] and l[1] < m[1]:
-        return l
-    elif r[1] < l[1] and r < m[1]:
-        return r
-    else:
-        return m
+    #  if l[1] < r[1] and l[1] < m[1]:
+        #  return l
+    #  elif r[1] < l[1] and r < m[1]:
+        #  return r
+    #  else:
+        #  return m
 
 if __name__ == "__main__":
     #  array1 = [0, 5, 12, 4]
