@@ -1,5 +1,6 @@
 import sys
 import math
+import time
 
 def test():
     tests = []
@@ -25,14 +26,50 @@ def test():
         num = num + 1
 
 def benchmark():
-
-
-
-def solve():
     tests = []
     with open('test_cases_without_solutions.txt', 'r') as f:
         for line in f:
+            tests.append(eval(line))
+    averages = []
+    test_num = 0
+    for x in tests:
+        times = []
+        print len(x)
+        for i in range(10):
+            question = []
+            old_time = time.time()
+            for i in range(len(x)):
+                question.append((x[i], i))
+            div_and_con(question)
+            new_time = time.time()
+            times.append(new_time - old_time)
+
+        averages.append(sum(times) / 10)
+        test_num = test_num + 1
+
+    for i in averages:
+        print i
+
+
+def solve():
+    test = []
+    answers = open('answers.txt', 'w')
+    with open('test_cases_without_solutions.txt', 'r') as f:
+        for line in f:
             test.append(eval(line))
+
+    for x in test:
+        # print x
+        question = []
+        for i in range(len(x)):
+            question.append((x[i], i))
+
+        response = div_and_con(question)
+        answers.write("{} {} {}\n".format(response[0], response[1], response[2]))
+
+    answers.close()
+
+
 
 
 
@@ -143,4 +180,6 @@ def div_and_con(array):
     return best
 
 if __name__ == "__main__":
-    test()
+    # benchmark()
+    solve()
+    # test()
