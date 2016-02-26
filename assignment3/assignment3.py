@@ -16,7 +16,7 @@ def test():
         # data = (t[0], 0, 0, 0)
         print t[0]
         print "\n"
-        answer = div_and_con(t[0])
+        answer = div_and_con(t[0], 0, len(t[0]))
 
         # print t[0]
         # print "\n"
@@ -34,16 +34,16 @@ def test():
         # print "-----------------------------"
 
 
-        # if answer[0] != t[1] or answer[1] != t[2] or answer[2] != t[3]:
-        #     print "test {} FAILED: Got {}, {}, {} "\
-        #             "expected {}, {}, {}".format(num, answer[1], answer[2], answer[3],
-        #                                          t[1], t[2], t[3])
-        # else:
-        #     print "test {} PASSED: GOT {}, {}, {}".format(num, answer[0], answer[1], answer[2])
-        #
+        if answer[0] != t[1] or answer[1] != t[2] or answer[2] != t[3]:
+            print "test {} FAILED: Got {}, {}, {} "\
+                    "expected {}, {}, {}".format(num, answer[0], answer[1], answer[2],
+                                                 t[1], t[2], t[3])
+        else:
+            print "test {} PASSED: GOT {}, {}, {}".format(num, answer[0], answer[1], answer[2])
 
-        if answer != t[1]:
-            print "test {} FAILED: Got {} expected {}".format(num, answer, t[1])
+
+        # if answer != t[1]:
+        #     print "test {} FAILED: Got {} expected {}".format(num, answer, t[1])
         # else:
             # print "test {} PASSED: GOT {}, {}, {}".format(num, answer[0], answer[1], answer[2])
 
@@ -68,17 +68,14 @@ def method2(array1, array2):
     s_a1 = sorted(array1)
     s_a2 = sorted(array2)
 
+    print s_a1
+    print s_a2
+
     sum_a1 = summation(s_a1, 'prefix')
     sum_a2 = summation(s_a2, 'suffix')
 
     len1 = len(array1)
     len2 = len(array2)
-
-    #  if len1 == 1 and len2 == 1:
-        #  return (array1[0] + array2[0], sum_a1[0] + sum_a2[0], 0, 1)
-
-    # print s_a1
-    # print s_a2
 
     best = (0, 0)
     i = 0
@@ -100,12 +97,14 @@ def method2(array1, array2):
             i = i + 1
 
     # print s_a1[i], s_a2[k]
+    big_array = array1 + array2
 
-    # return (s, best[0], best[1])
-    return [s]
+    return (big_array[best[0], (best[0] + best[1])], s, best[0], (best[0] + best[1]))
+    # return [s]
 
 
 def method3(array1, array2):
+    print "Array 1 = {}\nArray2 = {}".format(array1, array2)
 
     array1_index = []
     array2_index = []
@@ -114,8 +113,6 @@ def method3(array1, array2):
         array1_index.append((array1[i], 1, i))
     for i in range(len(array2[0])):
         array1_index.append((array2[i], 2, i))
-
-    print "Array 1 = {}\nArray2 = {}".format(array1, array2)
 
     # a1 = [(array1[x], 1) for x in range(len(array1_index))]
     for x in range(len(array2_index)):
@@ -133,7 +130,7 @@ def method3(array1, array2):
     min_num = sys.maxint
     if len(sorted_biglist) == 1:
         return sorted_biglist[0]
-    smallest = (sys.maxint, 0, 0)
+    smallest = (sys.maxint, 1, 1)
 
     # (a1: 1, a2: 2)
 
@@ -145,7 +142,7 @@ def method3(array1, array2):
 
     return smallest
 
-def div_and_con(array):
+def div_and_con(array, left_index, right_index):
     """
     Basic data structure:
 
@@ -155,21 +152,19 @@ def div_and_con(array):
     """
     #  print array
     if len(array) == 1:
-        return (array[0], 0, 0)
+        print "base case"
+        return (array[0], left_index, right_index)
 
     n = int((len(array) / 2))
-    #  print n
-    # l_data = (array[0][n:], array[1], array[2], array[3])
-    l = div_and_con(array[:n])
-    # r_data = (array[0][:n], array[1], array[2], array[3])
-    r = div_and_con(array[n:])
-    m = method3(l, r)
+    l = div_and_con(array[:n], left_index, n)
+    r = div_and_con(array[n:], n, right_index)
+    m = method2(array[l[1]:l[2]], array[r[1]:r[2]])
 
     print "n = {}, l = {}, r = {}, m = {}".format(n, l, r, m)
 
     # Compare left, right and suffix/prefix
 
-    best = min(l, r, m, key=lambda x: x[0])
+    best = min(l, r, m, key=lambda x: x[1])
     index = (0, 0)
 
     if l[0] == best:
@@ -179,7 +174,8 @@ def div_and_con(array):
     else:
         index = m[1], m[2]
 
-    return (array[index[0]:index[1]], index[0], index[1])
+    # return (array[index[0]:index[1]], index[0], index[1])
+    return best
     # if l[0] < r[0] and l[0] < m[0]:
     #     return l
     # elif r[0] < l[0] and r < m[0]:
@@ -188,19 +184,4 @@ def div_and_con(array):
     #     return m
 
 if __name__ == "__main__":
-    #  array1 = [0, 5, 12, 4]
-    #  array2 = [12, -2, 7, 9]
-    array3 = [58, -6, 97, -93, -23]
-    array4 = [31, -41, 59, 26, -53]
-
-    #  test(array3 + array4)
     test()
-
-
-    # get summations of the prefix and suffix
-
-    #  print summation(array3, 'prefix')
-    #  print summation(array4, 'suffix')
-
-    # print method3(summation(array1), summation(array2))
-    #  print method2(summation(array3, 'prefix'), summation(array4, 'suffix'))
