@@ -59,7 +59,6 @@ def solve():
             test.append(eval(line))
 
     for x in test:
-        # print x
         question = []
         for i in range(len(x)):
             question.append((x[i], i))
@@ -70,11 +69,7 @@ def solve():
     answers.close()
 
 
-
-
-
 def summation(array, type):
-    #  print array
     s = 0
     sum_array = []
     if type == "prefix":
@@ -147,7 +142,6 @@ def method3(array1, array2):
             continue
 
         if best is None or abs(sorted_biglist[x][0] - sorted_biglist[x+1][0]) < abs(best[0][2] - best[1][2]):
-            # (returns value and the two index for the closet to 0)
             best = (sorted_biglist[x], sorted_biglist[x+1], abs(sorted_biglist[x][0] - sorted_biglist[x+1][0]))
 
     if best[1][1]:
