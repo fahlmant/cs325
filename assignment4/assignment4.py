@@ -32,12 +32,12 @@ def solve(avg, day):
            (x5 * math.sin((2 * math.pi * day) / (365.25 * 10.7))) <= avg
 
     # Contraints
-    prob += x0 + \
-           (x1 * day) + \
-           (x2 * math.cos((2 * math.pi * day) / 365.25)) + \
-           (x3 * math.sin((2 * math.pi * day) / 365.25)) + \
-           (x4 * math.cos((2 * math.pi * day) / (365.25 * 10.7))) + \
-           (x5 * math.sin((2 * math.pi * day) / (365.25 * 10.7))) >= avg
+    prob += x0 - \
+           (x1 * day) - \
+           (x2 * math.cos((2 * math.pi * day) / 365.25)) - \
+           (x3 * math.sin((2 * math.pi * day) / 365.25)) - \
+           (x4 * math.cos((2 * math.pi * day) / (365.25 * 10.7))) - \
+           (x5 * math.sin((2 * math.pi * day) / (365.25 * 10.7))) >= -avg
 
     status = prob.solve()
     print LpStatus[status]
