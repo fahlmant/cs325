@@ -20,7 +20,6 @@ def solve(avg, day):
            (x1 * day) + \
            (x2 * math.cos((2 * math.pi * day) / 365.25)) + \
            (x3 * math.sin((2 * math.pi * day) / 365.25)) + \
-           (x3 * math.sin((2 * math.pi * day) / 365.25)) + \
            (x4 * math.cos((2 * math.pi * day) / (365.25 * 10.7))) + \
            (x5 * math.sin((2 * math.pi * day) / (365.25 * 10.7)))
 
@@ -29,7 +28,6 @@ def solve(avg, day):
            (x1 * day) - \
            (x2 * math.cos((2 * math.pi * day) / 365.25)) - \
            (x3 * math.sin((2 * math.pi * day) / 365.25)) - \
-           (x3 * math.sin((2 * math.pi * day) / 365.25)) - \
            (x4 * math.cos((2 * math.pi * day) / (365.25 * 10.7))) - \
            (x5 * math.sin((2 * math.pi * day) / (365.25 * 10.7))) <= avg
 
@@ -37,7 +35,6 @@ def solve(avg, day):
     prob += x0 + \
            (x1 * day) + \
            (x2 * math.cos((2 * math.pi * day) / 365.25)) + \
-           (x3 * math.sin((2 * math.pi * day) / 365.25)) + \
            (x3 * math.sin((2 * math.pi * day) / 365.25)) + \
            (x4 * math.cos((2 * math.pi * day) / (365.25 * 10.7))) + \
            (x5 * math.sin((2 * math.pi * day) / (365.25 * 10.7))) >= avg
