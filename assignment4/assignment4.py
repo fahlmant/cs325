@@ -67,4 +67,6 @@ def parse_data(file_name):
 if __name__ == "__main__":
     data = parse_data('Corvallis_data.csv')
     # print data[0][7:]
-    solve(float(data[0][7]), int(data[0][8]))
+    for i in range(10):
+        solve(float(data[i][7]), int(data[i][8]))
+    # solve(float(data[1][7]), int(data[1][8]))
