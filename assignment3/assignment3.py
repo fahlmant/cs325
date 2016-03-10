@@ -1,5 +1,6 @@
 import sys
 import math
+import time
 
 def test():
     tests = []
@@ -9,52 +10,91 @@ def test():
 
     num = 0
     for t in tests:
-        data = (t[0], 0, 0, 0)
-        answer = div_and_con(data)
+        question = []
+        for i in range(len(t[0])):
+            question.append((t[0][i], i))
 
-        #  print "method: {}, correct: {}".format(method2(t[0][(len(t[0]) / 2):],
-                                                       #  t[0][:(len(t[0]) / 2)]), (t[1], t[2], t[3]))
-
+        answer = div_and_con(question)
 
         if answer[0] != t[1] or answer[1] != t[2] or answer[2] != t[3]:
             print "test {} FAILED: Got {}, {}, {} "\
-                    "expected {}, {}, {}".format(num, answer[1], answer[2], answer[3],
+                    "expected {}, {}, {}".format(num, answer[0], answer[1], answer[2],
                                                  t[1], t[2], t[3])
         else:
             print "test {} PASSED: GOT {}, {}, {}".format(num, answer[0], answer[1], answer[2])
 
         num = num + 1
 
+def benchmark():
+    tests = []
+    with open('test_cases_without_solutions.txt', 'r') as f:
+        for line in f:
+            tests.append(eval(line))
+    averages = []
+    test_num = 0
+    for x in tests:
+        times = []
+        print len(x)
+        for i in range(10):
+            question = []
+            old_time = time.time()
+            for i in range(len(x)):
+                question.append((x[i], i))
+            div_and_con(question)
+            new_time = time.time()
+            times.append(new_time - old_time)
+
+        averages.append(sum(times) / 10)
+        test_num = test_num + 1
+
+    for i in averages:
+        print i
+
+
+def solve():
+    test = []
+    answers = open('answers.txt', 'w')
+    with open('test_cases_without_solutions.txt', 'r') as f:
+        for line in f:
+            test.append(eval(line))
+
+    for x in test:
+        question = []
+        for i in range(len(x)):
+            question.append((x[i], i))
+
+        response = div_and_con(question)
+        answers.write("{} {} {}\n".format(response[0], response[1], response[2]))
+
+    answers.close()
+
+
 def summation(array, type):
-    #  print array
     s = 0
     sum_array = []
     if type == "prefix":
         for i in range(len(array)):
-            s = s + array[i]
-            sum_array.append(s)
+            s = s + array[i][0]
+            sum_array.append((s, array[i][1]))
     elif type == "suffix":
         for i in range(len(array) - 1, -1, -1):
-            s = s + array[i]
-            sum_array.insert(0, s)
+            s = s + array[i][0]
+            sum_array.insert(0, (s, array[i][1]))
 
     return sum_array
 
 def method2(array1, array2):
-    s_a1 = sorted(array1[0])
-    s_a2 = sorted(array2[0])
+    s_a1 = sorted(array1)
+    s_a2 = sorted(array2)
+
+    print s_a1
+    print s_a2
 
     sum_a1 = summation(s_a1, 'prefix')
     sum_a2 = summation(s_a2, 'suffix')
 
-    len1 = len(array1[0])
-    len2 = len(array2[0])
-
-    #  if len1 == 1 and len2 == 1:
-        #  return (array1[0] + array2[0], sum_a1[0] + sum_a2[0], 0, 1)
-
-    # print s_a1
-    # print s_a2
+    len1 = len(array1)
+    len2 = len(array2)
 
     best = (0, 0)
     i = 0
@@ -76,70 +116,64 @@ def method2(array1, array2):
             i = i + 1
 
     # print s_a1[i], s_a2[k]
+    big_array = array1 + array2
 
-    return (s, best[0], best[1])
+    return (big_array[best[0], (best[0] + best[1])], s, best[0], (best[0] + best[1]))
+    # return [s]
 
 
 def method3(array1, array2):
 
+    array1_index = []
+    array2_index = []
+    # Store indexes for arrays
+    for i in range(len(array1)):
+        array1_index.append((array1[i][0], 1, array1[i][1]))
+    for i in range(len(array2)):
+        array2_index.append((-array2[i][0], 2, array2[i][1]))
 
-    a1 = [(array1[x], 1) for x in range(len(array1))]
-    negarray = [-x for x in array2]
-    a2 = [(negarray[x], 2) for x in range(len(negarray))]
-    biglist = a1 + a2
-    biglist.sort() #by first value
-    print "a1: {}".format(a1)
-    print "a2: {}".format(a2)
-    print "biglist: {}".format(biglist)
-    min_num = sys.maxint
-    for x in range(len(biglist) - 1):
-        if(biglist[x][1] != biglist[x+1][1]):
-            min_num = min(abs(min_num), abs(biglist[x][0] - biglist[x-1][0]))
+    biglist = array1_index + array2_index
+    sorted_biglist = sorted(biglist, key=lambda x: x[0]) #by first value
 
-    return min_num
+    best = None
+
+    for x in range(len(sorted_biglist) - 1):
+        if(sorted_biglist[x][1] == sorted_biglist[x+1][1]):
+            continue
+
+        if best is None or abs(sorted_biglist[x][0] - sorted_biglist[x+1][0]) < abs(best[0][2] - best[1][2]):
+            best = (sorted_biglist[x], sorted_biglist[x+1], abs(sorted_biglist[x][0] - sorted_biglist[x+1][0]))
+
+    if best[1][1]:
+        best = (best[1], best[0], best[2])
+
+    return (best[2], best[0][2], best[1][2])
 
 def div_and_con(array):
     """
     Basic data structure:
 
-    (array, sum, left index, right index)
+    input: (array of tuples (value, index))
+
+    return: (sum, left_index, right_index)
+
+    Note: we are using method3
     """
-    #  print array
-    if len(array[0]) == 1:
-        return array
+    if len(array) < 2:
+        return (abs(array[0][0]), array[0][1], array[0][1])
 
-    n = int(math.floor(len(array[0]) / 2))
-    #  print n
-    l_data = (array[0][n:], array[1], array[2], array[3])
-    l = div_and_con(l_data)
-    r_data = (array[0][:n], array[1], array[2], array[3])
-    r = div_and_con(r_data)
+    n = int((len(array) / 2))
+    left_sum = summation(array[:n], 'prefix')
+    right_sum = summation(array[n:], 'suffix')
+    l = div_and_con(array[:n])
+    r = div_and_con(array[n:])
+    m = method3(left_sum, right_sum)
 
-    #  m = method2(l, r)
-    return method2(l, r)
+    best = min(l, r, m, key=lambda x: x[0])
 
-    # Compare left, right and suffix/prefix
-    #  if l[1] < r[1] and l[1] < m[1]:
-        #  return l
-    #  elif r[1] < l[1] and r < m[1]:
-        #  return r
-    #  else:
-        #  return m
+    return best
 
 if __name__ == "__main__":
-    #  array1 = [0, 5, 12, 4]
-    #  array2 = [12, -2, 7, 9]
-    array3 = [58, -6, 97, -93, -23]
-    array4 = [31, -41, 59, 26, -53]
-
-    #  test(array3 + array4)
-    test()
-
-
-    # get summations of the prefix and suffix
-
-    #  print summation(array3, 'prefix')
-    #  print summation(array4, 'suffix')
-
-    # print method3(summation(array1), summation(array2))
-    #  print method2(summation(array3, 'prefix'), summation(array4, 'suffix'))
+    # benchmark()
+    solve()
+    # test()
